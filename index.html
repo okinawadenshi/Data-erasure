@@ -48,12 +48,19 @@
     }
     .logo {
       font-size: 1rem; font-weight: 700; color: var(--blue);
-      display: flex; align-items: center; gap: 10px;
+      display: flex; align-items: center; gap: 12px;
     }
-    .logo-badge {
-      background: var(--blue); color: white;
-      font-size: .65rem; padding: 3px 8px; border-radius: 4px; letter-spacing: .05em;
+    .logo img {
+      height: 36px; width: auto;
+      object-fit: contain;
     }
+    .logo-text {
+      font-size: .85rem; color: #374151; font-weight: 600;
+      border-left: 1px solid var(--border);
+      padding-left: 12px;
+      line-height: 1.3;
+    }
+    .logo-text span { display: block; font-size: .72rem; color: var(--gray); font-weight: 400; }
     .header-cta {
       background: var(--blue); color: white;
       padding: 9px 22px; border-radius: 6px;
@@ -213,6 +220,53 @@
     }
     .product-header h3 { font-size: 1.25rem; font-weight: 900; margin-bottom: 4px; }
     .product-header .product-model { font-size: .8rem; opacity: .85; }
+
+    /* ===== PRODUCT IMAGE ===== */
+    .product-img-wrap {
+      background: #f5f6f8;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      height: 240px;
+      position: relative;
+    }
+    .product-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: contain;
+      padding: 20px;
+      transition: transform .35s ease;
+    }
+    .product-card:hover .product-img-wrap img { transform: scale(1.05); }
+
+    /* JetEraser image tabs */
+    .img-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      background: white;
+    }
+    .img-tab-btn {
+      flex: 1; padding: 8px 0;
+      font-size: .78rem; font-weight: 700;
+      border: none; cursor: pointer;
+      transition: background .2s, color .2s;
+    }
+    .img-tab-btn.active  { background: var(--blue); color: white; }
+    .img-tab-btn.inactive{ background: #f0f2f5; color: #6b7280; }
+    .img-tab-btn.inactive:hover { background: var(--blue-l); color: var(--blue); }
+    .jet-img-panel {
+      display: none;
+      width: 100%; height: 220px;
+      align-items: center; justify-content: center;
+      background: #f5f6f8;
+    }
+    .jet-img-panel.show { display: flex; }
+    .jet-img-panel img {
+      max-width: 100%; max-height: 220px;
+      object-fit: contain; padding: 16px;
+      transition: transform .35s ease;
+    }
+    .product-card:hover .jet-img-panel.show img { transform: scale(1.05); }
+
     .product-body { padding: 24px 28px; }
     .price-row {
       display: flex; align-items: baseline; gap: 8px;
@@ -291,7 +345,6 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 0; margin-top: 40px;
-      position: relative;
     }
     .flow-step {
       background: var(--white);
@@ -299,7 +352,6 @@
       border-radius: var(--radius);
       padding: 28px 22px;
       text-align: center;
-      position: relative;
       margin: 8px;
       transition: box-shadow .2s;
     }
@@ -386,8 +438,16 @@
 <header>
   <div class="header-inner">
     <div class="logo">
-      <span class="logo-badge">沖縄電子</span>
-      データ消去機レンタル
+      <img
+        src="https://drive.google.com/uc?export=view&id=1Re87MDf7iHYemvPjQbytAR3i12zTN8Fn"
+        alt="株式会社沖縄電子"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+      />
+      <span style="display:none;background:var(--blue);color:white;font-size:.65rem;padding:3px 8px;border-radius:4px;letter-spacing:.05em;">沖縄電子</span>
+      <div class="logo-text">
+        株式会社沖縄電子
+        <span>データ消去機レンタル</span>
+      </div>
     </div>
     <a href="https://www.notion.so/312447cbbba580228b93c1d65bb3cf6d?pvs=106"
        target="_blank" rel="noopener" class="header-cta">
@@ -467,12 +527,20 @@
     <p class="section-desc">用途に合わせて2種類からお選びいただけます。</p>
 
     <div class="products-grid">
-      <!-- Product 1: STPN-30 -->
+
+      <!-- ① STPN-30 -->
       <div class="product-card">
         <div class="product-header">
           <span class="product-tag">① 物理破壊装置</span>
           <h3>ストレージパンチャー</h3>
           <div class="product-model">STPN-30</div>
+        </div>
+        <div class="product-img-wrap">
+          <img
+            src="https://drive.google.com/uc?export=view&id=1lJ56-UA2ikhBtwX0lx0ef1Pe5LHvf1jJ"
+            alt="ストレージパンチャー STPN-30"
+            loading="lazy"
+          />
         </div>
         <div class="product-body">
           <div class="price-row">
@@ -497,12 +565,33 @@
         </div>
       </div>
 
-      <!-- Product 2: JetEraser -->
+      <!-- ② JetEraser -->
       <div class="product-card">
         <div class="product-header">
           <span class="product-tag">② データ消去装置</span>
           <h3>JetEraser</h3>
           <div class="product-model">HDE-GT400 / HDE-GT600</div>
+        </div>
+        <!-- タブ切り替え画像 -->
+        <div>
+          <div class="img-tabs">
+            <button class="img-tab-btn active"   id="tab-gt400" onclick="switchJetImg('gt400')">HDE-GT400（4枚同時）</button>
+            <button class="img-tab-btn inactive" id="tab-gt600" onclick="switchJetImg('gt600')">HDE-GT600（6枚同時）</button>
+          </div>
+          <div class="jet-img-panel show" id="panel-gt400">
+            <img
+              src="https://drive.google.com/uc?export=view&id=1WNKB-bKmH9iSKDc1D4wvcAYYV6SSHY2C"
+              alt="JetEraser HDE-GT400"
+              loading="lazy"
+            />
+          </div>
+          <div class="jet-img-panel" id="panel-gt600">
+            <img
+              src="https://drive.google.com/uc?export=view&id=18NWXrWhjrUBVS7UAgo5qAl-uXcudGdms"
+              alt="JetEraser HDE-GT600"
+              loading="lazy"
+            />
+          </div>
         </div>
         <div class="product-body">
           <div class="sub-plan">
@@ -528,6 +617,7 @@
           </ul>
         </div>
       </div>
+
     </div>
   </div>
 </section>
@@ -537,9 +627,7 @@
   <div class="section-inner">
     <span class="section-label">Pricing</span>
     <h2 class="section-title">料金体系</h2>
-    <p class="section-desc">
-      よくある料金に関するご質問をまとめました。
-    </p>
+    <p class="section-desc">よくある料金に関するご質問をまとめました。</p>
     <div class="pricing-box">
       <div class="qa-item">
         <div class="qa-q">
@@ -565,7 +653,6 @@
     <span class="section-label">Flow</span>
     <h2 class="section-title">貸出・配送・返却の流れ</h2>
     <p class="section-desc">ご相談からご返却まで、スムーズにご利用いただけます。</p>
-
     <div class="flow-steps">
       <div class="flow-step">
         <div class="flow-num">1</div>
@@ -588,7 +675,6 @@
         <p>レンタル期間終了の<strong>翌日まで</strong>にご返却ください（例：1週間レンタル＝最終日翌日まで）。</p>
       </div>
     </div>
-
     <div class="flow-note">
       <div class="flow-note-item">
         <strong>📦 配送について</strong>
@@ -640,12 +726,36 @@
 
 <!-- ===== FOOTER ===== -->
 <footer>
+  <img
+    src="https://drive.google.com/uc?export=view&id=1Re87MDf7iHYemvPjQbytAR3i12zTN8Fn"
+    alt="株式会社沖縄電子"
+    style="height:40px;width:auto;object-fit:contain;margin:0 auto 12px;filter:brightness(0) invert(1);opacity:.85;"
+    onerror="this.style.display='none';"
+  />
   <strong>株式会社沖縄電子</strong>
   <p>データ消去機レンタルサービス</p>
   <p style="margin-top:16px;font-size:.75rem;opacity:.7;">
     © 2024 株式会社沖縄電子 All Rights Reserved.
   </p>
 </footer>
+
+<script>
+  function switchJetImg(model) {
+    ['gt400', 'gt600'].forEach(function(m) {
+      var panel = document.getElementById('panel-' + m);
+      var tab   = document.getElementById('tab-'   + m);
+      if (m === model) {
+        panel.classList.add('show');
+        tab.classList.remove('inactive');
+        tab.classList.add('active');
+      } else {
+        panel.classList.remove('show');
+        tab.classList.remove('active');
+        tab.classList.add('inactive');
+      }
+    });
+  }
+</script>
 
 </body>
 </html>
